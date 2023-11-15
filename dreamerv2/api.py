@@ -67,14 +67,15 @@ def train(env, config, outputs=None):
         logger.scalar(f'mean_{key}', ep[key].mean())
       if re.match(config.log_keys_max, key):
         logger.scalar(f'max_{key}', ep[key].max(0).mean())
-    if should_video(step):
-      for key in config.log_keys_video:
-        logger.video(f'policy_{key}', ep[key])
+    # if should_video(step):
+    #   for key in config.log_keys_video:
+    #     logger.video(f'policy_{key}', ep[key])
     logger.add(replay.stats)
     logger.write()
 
-  env = common.GymWrapper(env)
-  env = common.ResizeImage(env)
+  env = common.GymWrapper(env, obs_key='joints')
+  print(env.obs_space)
+  # env = common.ResizeImage(env)
   if hasattr(env.act_space['action'], 'n'):
     env = common.OneHotAction(env)
   else:

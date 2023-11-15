@@ -237,7 +237,7 @@ class ActorCritic(common.Module):
     with tf.GradientTape() as actor_tape:
       seq = world_model.imagine(self.actor, start, is_terminal, hor)
       reward = reward_fn(seq)
-      seq['reward'], mets1 = self.rewnorm(reward)
+      seq['reward'], mets1 = self.rewnorm(float(reward))
       mets1 = {f'reward_{k}': v for k, v in mets1.items()}
       target, mets2 = self.target(seq)
       actor_loss, mets3 = self.actor_loss(seq, target)
